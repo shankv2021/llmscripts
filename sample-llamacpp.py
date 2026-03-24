@@ -112,24 +112,9 @@ def print_results(stats, name, total):
 dataset = load_dataset("boolq", split="validation")
 dataset = dataset.select(range(N_SAMPLES))
 
-start = time.perf_counter()
-for ex in tqdm(dataset):
-    gold = 1 if ex["answer"] else 0
-    prompt = build_prompt(ex["passage"], ex["question"])
+grammar_restriction_stats = run_experiment(dataset, call_llama_server, "GRAMMAR", grammar=True)
+print_results(grammar_restriction_stats, "GRAMMAR", len(dataset))
 
-    # Test llama-server first
-    grammar_restriction_stats = run_experiment(dataset, call_llama_server, "GRAMMAR", grammar=True)
-    print_results(grammar_restriction_stats, "GRAMMAR", len(dataset))
+json_schema_restriction_stats = run_experiment(dataset, call_llama_server, "JSON-SCHEMA", grammar=False)
+print_results(json_schema_restriction_stats, "JSON-SCHEMA", len(dataset))
     
-    # Then test Ollama
-    json_schema_restriction_stats = run_experiment(dataset, call_llama_server, "JSON-SCHEMA", grammar=False)
-    print_results(json_schema_restriction_stats, "JSON-SCHEMA", len(dataset))
-    
-    # Final comparison
-    print("\n" + "="*50)
-    print("FINAL COMPARISON")
-    print("="*50)
-    print_results(grammar_restriction_stats, "GRAMMAR", len(dataset))
-    print_results(json_schema_restriction_stats, "JSON-SCHEMA", len(dataset))))
-
-print(time.perf_counter() - start)
