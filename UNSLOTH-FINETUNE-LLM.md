@@ -142,8 +142,8 @@ trainer = SFTTrainer(
 #### Step 7: Train Only on Responses (*template again must match the model type - gemma*)
 A crucial optimization: we only compute loss on assistant responses, not user questions
 ```python
-from unsloth.chat_templates import train_on_responses_only
 # For Gemma 3 model
+from unsloth.chat_templates import train_on_responses_only
 trainer = train_on_responses_only(
     trainer,
     instruction_part = "<start_of_turn>user\n",
