@@ -161,9 +161,10 @@ trainer = train_on_responses_only(
 )
 ```
 
-#### Step 8: Training Time - To resume run `trainer.train(resume_from_checkpoint = True)`
+#### Step 8: Training Time
 ```python
 trainer_stats = trainer.train()
+# To resume run trainer.train(resume_from_checkpoint = True)
 print(f"Training completed in {trainer_stats.metrics['train_runtime']:.2f}s")
 ```
 <blockquote>
@@ -215,7 +216,7 @@ tokenizer.save_pretrained("gemma_3_lora")
 # tokenizer.push_to_hub("HF_ACCOUNT/gemma_3_lora", token = "YOUR_HF_TOKEN") # Online saving
 ```
 
-##### To test: Load the LoRA adapters we just saved for inference, set False to True:
+##### To test: Load the LoRA adapters we just saved for inference
 ```python
 
 from unsloth import FastModel
