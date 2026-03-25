@@ -37,6 +37,8 @@ print(f"GPU: {torch.cuda.get_device_name(0)}")
 If the kernel dies or restarts at any time, simply rerun the steps.
 </blockquote>
 
+Check out [Unsloth Notebooks](https://unsloth.ai/docs/get-started/unsloth-notebooks) for more info.
+
 #### Step 1: Load model with 4-bit quantization
 
 Make sure that `MODEL_NAME` below is a base model version from huggingface
