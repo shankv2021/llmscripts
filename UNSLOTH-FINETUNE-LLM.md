@@ -97,7 +97,8 @@ print(f"Dataset size: {len(dataset):,} examples")
 from unsloth.chat_templates import get_chat_template,standardize_data_formats
 tokenizer = get_chat_template(
     tokenizer,
-    chat_template = "gemma-3", # Change to 'llama3' for llama 3 models
+    chat_template = "gemma-3",
+    # chat_template = "llama-3.1" # For llama 3 models
 )
 dataset = standardize_data_formats(dataset)
 ```
@@ -139,10 +140,11 @@ trainer = SFTTrainer(
 )
 ```
 
-#### Step 7: Train Only on Responses (*template again must match the model type - gemma*)
+#### Step 7: Train Only on Responses
 A crucial optimization: we only compute loss on assistant responses, not user questions
+
+##### For gemma 3 model
 ```python
-# For Gemma 3 model
 from unsloth.chat_templates import train_on_responses_only
 trainer = train_on_responses_only(
     trainer,
@@ -150,9 +152,8 @@ trainer = train_on_responses_only(
     response_part = "<start_of_turn>model\n",
 )
 ```
-
+##### For llama 3 model
 ```python
-# For llama 3 model
 from unsloth.chat_templates import train_on_responses_only
 trainer = train_on_responses_only(
     trainer,
@@ -176,6 +177,8 @@ You’ll see a progress bar showing:
 </blockquote>
 
 #### Step 9: Run model via Unsloth native inference.
+
+##### For gemma 3 model
 ```python
 from unsloth.chat_templates import get_chat_template
 tokenizer = get_chat_template(
@@ -202,6 +205,29 @@ outputs = model.generate(
     # Recommended Gemma-3 settings!
     temperature = 1.0, top_p = 0.95, top_k = 64,
 )
+tokenizer.batch_decode(outputs)
+```
+##### For llama 3 model
+```python
+from unsloth.chat_templates import get_chat_template
+tokenizer = get_chat_template(
+    tokenizer,
+    chat_template = "llama-3.1",
+)
+FastLanguageModel.for_inference(model) # Enable native 2x faster inference
+
+messages = [
+    {"role": "user", "content": "Continue the fibonacci sequence: 1, 1, 2, 3, 5, 8,"},
+]
+inputs = tokenizer.apply_chat_template(
+    messages,
+    tokenize = True,
+    add_generation_prompt = True, # Must add for generation
+    return_tensors = "pt",
+).to("cuda")
+
+outputs = model.generate(input_ids = inputs, max_new_tokens = 64, use_cache = True,
+                         temperature = 1.5, min_p = 0.1)
 tokenizer.batch_decode(outputs)
 ```
 
