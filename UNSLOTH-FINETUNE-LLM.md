@@ -93,12 +93,11 @@ print(f"Dataset size: {len(dataset):,} examples")
 
 #### Chat Templates: The Secret Sauce 
 
-chat_template = "gemma-3" because we are using gemma model. Change accordingly
 ```python
 from unsloth.chat_templates import get_chat_template,standardize_data_formats
 tokenizer = get_chat_template(
     tokenizer,
-    chat_template = "gemma-3",
+    chat_template = "gemma-3", # Change to 'llama3' for llama 3 models
 )
 dataset = standardize_data_formats(dataset)
 ```
@@ -144,10 +143,20 @@ trainer = SFTTrainer(
 A crucial optimization: we only compute loss on assistant responses, not user questions
 ```python
 from unsloth.chat_templates import train_on_responses_only
+# For Gemma 3 model
 trainer = train_on_responses_only(
     trainer,
     instruction_part = "<start_of_turn>user\n",
     response_part = "<start_of_turn>model\n",
+)
+```
+
+```python
+# For llama 3 model
+trainer = train_on_responses_only(
+    trainer,
+    instruction_part="<|start_header_id|>user<|end_header_id|>\n\n",
+    response_part="<|start_header_id|>assistant<|end_header_id|>\n\n",
 )
 ```
 
