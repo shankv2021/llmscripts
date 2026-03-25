@@ -43,7 +43,7 @@ Make sure that `MODEL_NAME` below is a base model version from huggingface
 ```python
 from unsloth import FastModel
 MODEL_NAME = "google/medgemma-4b-it"
-MAX_SEQ_LENGTH = 2048
+MAX_SEQ_LENGTH = 512
 
 model, tokenizer = FastModel.from_pretrained(
     model_name=MODEL_NAME,
@@ -124,8 +124,8 @@ trainer = SFTTrainer(
     eval_dataset = None, # Can set up evaluation!
     args = SFTConfig(
         dataset_text_field = "text",
-        per_device_train_batch_size = 2,
-        gradient_accumulation_steps = 4, # Use GA to mimic batch size!
+        per_device_train_batch_size = 1,
+        gradient_accumulation_steps = 8, # Use GA to mimic batch size!
         warmup_steps = 5,
         # num_train_epochs = 1, # Set this for 1 full training run.
         max_steps = 30,
