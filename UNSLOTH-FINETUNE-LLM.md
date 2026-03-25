@@ -170,13 +170,6 @@ trainer_stats = trainer.train()
 # To resume run trainer.train(resume_from_checkpoint = True)
 print(f"Training completed in {trainer_stats.metrics['train_runtime']:.2f}s")
 ```
-<blockquote>
-You’ll see a progress bar showing:
-
-- Current step
-- Training loss (should decrease over time)
-- Estimated time remaining
-</blockquote>
 
 #### Step 9: Run model via Unsloth native inference.
 
