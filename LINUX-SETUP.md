@@ -142,6 +142,14 @@ hf download QuantTrio/Qwen3.6-27B-AWQ \
 
 tar -cf $HOME/Qwen3.6-27B-AWQ-4bit.tar \
     -C $HOME/models Qwen3.6-27B-AWQ
+
+# Qwen Embedding
+hf download Qwen/Qwen3-Embedding-4B \
+    --local-dir $HOME/models/Qwen3-Embedding-4B
+
+# Pack it
+tar -cf $HOME/Qwen3-Embedding-4B.tar \
+    -C $HOME/models Qwen3-Embedding-4B
 ```
 > See below for why we chose AWQ
 #### NVIDIA V100 Precision Compatibility
